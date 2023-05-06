@@ -1,0 +1,36 @@
+{
+  "name": "travel-explorer",
+  "version": "0.0.1",
+  "description": "CLI utility to easily browse hotels and attractions in every country/city",
+  "exports": "./src/index.js",
+  "type": "module",
+  "bin": {
+    "travel-explorer": "./src/index.js"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "df"
+  },
+  "keywords": [
+    "travel",
+    "hotels",
+    "attractions",
+    "booking",
+    "priceline"
+  ],
+  "author": "Ahurein Ebenezer",
+  "node": ">=14.16",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^1.0.0",
+    "axios": "^1.4.0",
+    "chalk": "^5.2.0",
+    "cli-table3": "^0.6.3",
+    "commander": "^10.0.1",
+    "figlet": "^1.6.0",
+    "ora": "^6.3.0"
+  }
+}
