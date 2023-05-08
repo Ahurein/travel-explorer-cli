@@ -30,3 +30,12 @@ export const getAttractionsByCountry = async (country, page) => {
     }
 }
 
+export const getAttractionsByCity = async (country, city, page) => {
+    try {
+        const attractions  = await axiosClient.post("/attractions/city", {country, city, page: Number(page)}) 
+        return attractions?.data?.data
+    } catch (error) {
+        log(error.response)
+    }
+}
+
