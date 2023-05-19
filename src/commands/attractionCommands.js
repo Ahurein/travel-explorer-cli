@@ -1,38 +1,15 @@
 import { Command } from "commander";
-import { input, select, confirm } from "@inquirer/prompts";
-import countriesByContinent from "../data/countries.js";
-import { capitalizeWords, paginateItems } from "../helpers/helper.js";
+import { input, select, confirm, rawlist } from "@inquirer/prompts";
+import {customTable, getUserContinent, getUserCountry } from "../helpers/helper.js";
 import chalk from "chalk";
-import { getAttractionsByCountry } from "../attractions.js";
+import { getAttractionsByCity, getAttractionsByContinent, getAttractionsByCountry, getAttractionsNearYou, getContinentTodo, getCountryTodo } from "../attractions.js";
 import ora from 'ora';
 import Table from "cli-table3";
 
 
 const spinner = ora('Loading unicorns')
 const log = console.log;
-const table = new Table({
-  head: ["No", "Title", "City", "Total Reviews", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"],
-  colWidths: [4, 20, 10, 10, 10, 10, 10, 15, 30, 30, 15],
-  wordWrap: true,
-  style: {
-    head: ['green',],
-  },
-  chars: {
-    top: '═',
-    'top-mid': '╤',
-    'top-left': '╔',
-    'top-right': '╗',
-    bottom: '═',
-    'bottom-mid': '╧',
-    'bottom-left': '╚',
-    'bottom-right': '╝',
-    left: '║',
-    'left-mid': '╟',
-    right: '║',
-    'right-mid': '╢',
-  },
-})
-
+let table = customTable(["No", "Title", "City", "Total Reviews", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"])
 export const attractionsCommand = new Command("attractions");
 
 attractionsCommand.action(async () => {
@@ -56,7 +33,7 @@ attractionsCommand.action(async () => {
       },
       {
         name: "Things to do",
-        value: "activitiesFilter",
+        value: "activityFilter",
         // description: "Filter by things to do",
       },
       {
@@ -72,26 +49,16 @@ attractionsCommand.action(async () => {
 
 const searchByFunctions = {
   countryFilter: async () => {
-    const countries = [];
-    Object.keys(countriesByContinent).forEach((continent) => {
-      countries.push(...countriesByContinent[continent]);
-    });
-    let userCountry = await input({ message: "Enter your country" });
-    if (!countries.includes(capitalizeWords(userCountry))) {
-      log(chalk.yellow("Country does not exist"));
-      countries.sort();
-      const formattedCountry = countries.reduce((acc, cur) => acc.concat({ name: cur, value: cur }), []);
-      userCountry = await paginateItems(formattedCountry, 10);
-    }
+    const userCountry = await getUserCountry()
+    let count = 0, page = 1;
 
-    let count = 0;
-    let page = 1;
     while (true) {
       spinner.start()
       const attractions = await getAttractionsByCountry(userCountry, page)
       spinner.stop()
 
-      if (!attractions.total) return log(chalk.red(`Sorry, We do not have any attractions on ${userCountry}`))
+      if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${userCountry}`))
+      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
       attractions.attractions.forEach(({ attraction }) => {
         const overview = `${attraction.overview}`.substring(0, 60) + "...";
         let review = ""
@@ -112,16 +79,158 @@ const searchByFunctions = {
     }
 
   },
-  continentFilter: () => {
-    // perform action for searching by continent
+  continentFilter: async () => {
+    const userContinent = await getUserContinent()
+    let count = 0, page = 1, displayTotal = true;
+    while (true) {
+      spinner.start()
+      const attractions = await getAttractionsByContinent(userContinent, page)
+      spinner.stop()
+
+      if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${userContinent}`))
+      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
+      attractions.attractions.forEach(({ attraction }) => {
+        const overview = `${attraction.overview}`.substring(0, 60) + "...";
+        let review = ""
+        count += 1;
+        if (Number(attraction.total_reviews) && attraction.reviews[0].body) {
+
+          review = `${attraction.reviews[0].body}`.substring(0, 60) + "...";
+        }
+        const { title, city, total_reviews, price, cancellation, overall_rating, main_image, url } = attraction
+        table.push([count, title, city, total_reviews, price, cancellation, overall_rating, chalk.yellow(main_image), review, overview, chalk.yellow(url)])
+      })
+
+      log(table.toString())
+      if (!attractions.hasMore) return log(chalk.green("No more data!"))
+      const fetchMore = await confirm({ message: "Do you want to fetch more attractions: " })
+      if (!fetchMore) return
+      page += 1
+    }
+
   },
-  cityFilter: () => {
-    // perform action for searching by city
+  cityFilter: async () => {
+    const userCountry = await getUserCountry()
+    const city = await input({ message: "Enter the city name: " })
+
+    let count = 0, page = 1;
+    while (true) {
+      spinner.start()
+      const attractions = await getAttractionsByCity(userCountry, city, page)
+      spinner.stop()
+
+      if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${city}`))
+      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
+      attractions.attractions.forEach(({ attraction }) => {
+        const overview = `${attraction.overview}`.substring(0, 60) + "...";
+        let review = ""
+        count += 1;
+        if (Number(attraction.total_reviews) && attraction.reviews[0].body) {
+
+          review = `${attraction.reviews[0].body}`.substring(0, 60) + "...";
+        }
+        const { title, city, total_reviews, price, cancellation, overall_rating, main_image, url } = attraction
+        table.push([count, title, city, total_reviews, price, cancellation, overall_rating, chalk.yellow(main_image), review, overview, chalk.yellow(url)])
+      })
+
+      log(table.toString())
+      if (!attractions.hasMore) return log(chalk.green("No more data!"))
+      const fetchMore = await confirm({ message: "Do you want to fetch more attractions: " })
+      if (!fetchMore) return
+      page += 1
+    }
   },
-  activityFilter: () => {
+  activityFilter: async () => {
     // perform action for filtering by things to do
+    const choices = [
+      { name: 'country', value: "country" },
+      { name: 'continent', value: "continent" }
+    ]
+    const filter = await rawlist({
+      message: "Filter activities by: ",
+      choices
+    })
+
+    let count = 0, page = 1, userCountry, userContinent, attractions = [], askUserLocation = true;
+    const thingsToDoTable = filter === "country" ? customTable(["No", "Title", "City", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"]) : customTable(["No", "Title", "City", "Country", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"], [4, 20, 10, 10, 10, 10, 10, 10, 15, 30, 30, 15])
+
+    while (true) {
+      switch (filter) {
+        case "country": {
+          if (askUserLocation) userCountry = await getUserCountry()
+          spinner.start()
+          attractions = await getCountryTodo(userCountry, page);
+          spinner.stop()
+          break;
+        }
+        case "continent": {
+          if(askUserLocation) userContinent = await getUserContinent()
+          spinner.start()
+          attractions = await getContinentTodo(userContinent, page);
+          spinner.stop()
+          break;
+        }
+      }
+
+      if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${filter}`))
+      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
+
+      attractions.attractions.forEach((attractionObj) => {
+        const {total, attraction} = attractionObj
+        const overview = `${attraction.overview}`.substring(0, 60) + "...";
+        let review = ""
+        count += 1;
+        if (Number(attraction.total_reviews) && attraction.reviews[0].body) {
+          review = `${attraction.reviews[0].body}`.substring(0, 60) + "...";
+        }
+        const { title, city, price, cancellation, country, overall_rating, main_image, url } = attraction
+        
+
+        thingsToDoTable.push([count, title, city, country, total, price, cancellation, overall_rating, chalk.yellow(main_image), review, overview, chalk.yellow(url)])
+      })
+      log(thingsToDoTable.toString())
+
+      if (!attractions.hasMore) return log(chalk.green("No more data!"))
+      const fetchMore = await confirm({ message: "Do you want to fetch more attractions: " })
+      if (!fetchMore) return
+      page += 1
+      askUserLocation = false
+    }
   },
-  nearFilter: () => {
+  nearFilter: async () => {
     // perform action for searching near you
+    const userCountry = await getUserCountry()
+    const thingsToDoTable = customTable(["No", "Title", "City", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"])
+
+    let count = 0, page = 1;
+    while (true) {
+      spinner.start()
+      let attractions = await getAttractionsNearYou(userCountry, page)
+      attractions = attractions.length > 0 ? attractions[0] : []
+      spinner.stop()
+
+      if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${userCountry}`))
+      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
+
+      attractions.attractions.forEach((attractionObj) => {
+        const { total, attraction } = attractionObj
+        const overview = `${attraction.overview}`.substring(0, 60) + "...";
+        let review = ""
+        count += 1;
+        if (Number(attraction.total_reviews) && attraction.reviews[0].body) {
+          review = `${attraction.reviews[0].body}`.substring(0, 60) + "...";
+        }
+        const { title, city, price, cancellation, country, overall_rating, main_image, url } = attraction
+
+
+        thingsToDoTable.push([count, title, city, total, price, cancellation, overall_rating, chalk.yellow(main_image), review, overview, chalk.yellow(url)])
+      })
+      log(thingsToDoTable.toString())
+
+      if (!attractions.hasMore) return log(chalk.green("No more data!"))
+      const fetchMore = await confirm({ message: "Do you want to fetch more attractions: " })
+      if (!fetchMore) return
+      page += 1
+    }
   },
 };
