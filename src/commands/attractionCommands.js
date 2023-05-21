@@ -81,7 +81,7 @@ const searchByFunctions = {
   },
   continentFilter: async () => {
     const userContinent = await getUserContinent()
-    let count = 0, page = 1, displayTotal = true;
+    let count = 0, page = 1;
     while (true) {
       spinner.start()
       const attractions = await getAttractionsByContinent(userContinent, page)
@@ -152,7 +152,7 @@ const searchByFunctions = {
     })
 
     let count = 0, page = 1, userCountry, userContinent, attractions = [], askUserLocation = true;
-    const thingsToDoTable = filter === "country" ? customTable(["No", "Title", "City", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"]) : customTable(["No", "Title", "City", "Country", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"], [4, 20, 10, 10, 10, 10, 10, 10, 15, 30, 30, 15])
+    const thingsToDoTable = filter === "country" ? customTable(["No", "Title", "City", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"]) : customTable(["No", "Title", "City", "Country", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"], [4, 20, 10, 10, 10, 10, 10, 10, 15, 20, 20, 15])
 
     while (true) {
       switch (filter) {
@@ -220,9 +220,7 @@ const searchByFunctions = {
         if (Number(attraction.total_reviews) && attraction.reviews[0].body) {
           review = `${attraction.reviews[0].body}`.substring(0, 60) + "...";
         }
-        const { title, city, price, cancellation, country, overall_rating, main_image, url } = attraction
-
-
+        const { title, city, price, cancellation, overall_rating, main_image, url } = attraction
         thingsToDoTable.push([count, title, city, total, price, cancellation, overall_rating, chalk.yellow(main_image), review, overview, chalk.yellow(url)])
       })
       log(thingsToDoTable.toString())

@@ -86,7 +86,7 @@ export const getUserContinent = async () => {
   return userContinent
 }
 
-export const customTable = (fields, colWidths = [4, 20, 10, 10, 10, 10, 10, 15, 30, 30, 15]) => {
+export const customTable = (fields, colWidths = [4, 20, 10, 10, 10, 10, 10, 15, 20, 20, 13]) => {
   return new CliTable3({
     head: fields,
     colWidths: colWidths,
