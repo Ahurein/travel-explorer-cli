@@ -1,10 +1,6 @@
 # Travel Explorer
 
-> CLI utility to easily browse flights, hotels and attractions in every country/city
-
-![](meow.gif)
-
-<!-- *I w [guide](https://google.com) tools.* -->
+> CLI utility to easily browse attractions in every country/city
 
 ## Features
 
@@ -13,15 +9,17 @@
 - Get attractions by continent
 - `Flights` and `hotels` will be available in future update
 
+## Example
+![example](./images/result.png)
 
 ## Install
 
 ```sh
 # Install globally (recommended).
-npm install -g @ahurein/travel-explorer
+npm install -g travel-explorer
 
 # Or run directly with npx
-npx install @ahurein/travel-explorer
+npx install travel-explorer
 ```
 
 ## Usage
@@ -30,6 +28,7 @@ npx install @ahurein/travel-explorer
 ```sh
 travel-explorer attractions
 ```
+![attraction](./images/attractions.png)
 
 ### Attraction options
 - By country
@@ -55,3 +54,4 @@ travel-explorer --continent Africa
 ```sh
 travel-explorer stats
 ```
+![statistics](./images/stats.png)
