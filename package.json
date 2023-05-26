@@ -1,27 +1,35 @@
 {
   "name": "travel-explorer",
   "version": "0.0.1",
-  "description": "CLI utility to easily browse hotels and attractions in every country/city",
-  "exports": "./src/index.js",
+  "description": "CLI utility to easily browse flights, hotels and attractions in every country/city",
+  "exports": "./lib/index.js",
   "type": "module",
   "bin": {
-    "travel-explorer": "./src/index.js"
+    "travel-explorer": "./lib/index.js"
   },
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "build": "tsc --watch",
+    "link": "npm link"
   },
   "repository": {
     "type": "git",
-    "url": "df"
+    "url": "https://github.com/Ahurein/travel-explorer-cli"
   },
   "keywords": [
     "travel",
     "hotels",
     "attractions",
     "booking",
-    "priceline"
+    "priceline",
+    "kayak",
+    "viator"
   ],
-  "author": "Ahurein Ebenezer",
+  "author": {
+    "name": "Ahurein Ebenezer",
+    "email": "ahureinebenezer@gmail.com",
+    "url": "https://github.com/Ahurein"
+  },
   "node": ">=14.16",
   "license": "MIT",
   "dependencies": {
@@ -31,6 +39,12 @@
     "cli-table3": "^0.6.3",
     "commander": "^10.0.1",
     "figlet": "^1.6.0",
-    "ora": "^6.3.0"
+    "ora": "^6.3.0",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.6",
+    "@types/node": "^20.2.3",
+    "ts-node": "^10.9.1"
   }
 }

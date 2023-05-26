@@ -1,12 +1,14 @@
 import { rawlist, input } from "@inquirer/prompts";
 import chalk from "chalk";
-import countriesByContinent from '../data/countries.js'
+import countriesObject from '../data/countries.js'
 import CliTable3 from "cli-table3";
+import { CellOptionsWithHref, IAllCountries } from "../interface/global.interface.js";
 
 const paginateColor = chalk.hex("#FC4F00")
 const log = console.log
+const countriesByContinent: IAllCountries = countriesObject
 
-export const capitalizeWords = (str) => {
+export const capitalizeWords = (str: string) => {
   let words = str?.split(" ");
   for (let i = 0; i < words.length; i++) {
     words[i] =
@@ -15,26 +17,25 @@ export const capitalizeWords = (str) => {
   return words.join(" ");
 };
 
-export const paginateItems = async (items, resultsPerPage, type="country") => {
+export const paginateItems = async (items: Array<any>, resultsPerPage: number, type = "country"): Promise<string> => {
   let start = 0;
   let end = resultsPerPage;
 
   do {
     const choices = items.slice(start, end);
     if (start > 0) {
-      choices.push({name: "Previous page", value: "Previous page"});
+      choices.push({ name: "Previous page", value: "Previous page" });
     }
 
     if (end < items.length) {
-      choices.push({name: "Next page", value: "Next page"});
+      choices.push({ name: "Next page", value: "Next page" });
     }
 
-    choices.push({name: "Exit", value: "Exit"});
+    choices.push({ name: "Exit", value: "Exit" });
 
     const choice = await rawlist({
-      message: chalk.green(`Page ${
-        Math.floor(start / resultsPerPage) + 1
-      }\n Select a ${type}:`),
+      message: chalk.green(`Page ${Math.floor(start / resultsPerPage) + 1
+        }\n Select a ${type}:`),
       choices,
     });
 
@@ -52,45 +53,52 @@ export const paginateItems = async (items, resultsPerPage, type="country") => {
         if (choice !== "Exit") {
           return choice;
         }
-        end = items.length + 5 
+        end = items.length + 5
     }
   } while (start >= 0 && end <= items.length);
+
+  return "Ghana"
 }
 
 
 
-export const getUserCountry = async () => {
-  const countries = [];
+export const getUserCountry = async (country?: string): Promise<string> => {
+  const countries: Array<string> = [];
   Object.keys(countriesByContinent).forEach((continent) => {
     countries.push(...countriesByContinent[continent]);
   });
+
+  if (country && countries.includes(capitalizeWords(country))) return country
   let userCountry = await input({ message: "Enter your country" });
+
   if (!countries.includes(capitalizeWords(userCountry))) {
     log(chalk.yellow("Country does not exist"));
     countries.sort();
-    const formattedCountry = countries.reduce((acc, cur) => acc.concat({ name: cur, value: cur }), []);
+    const formattedCountry = countries.reduce((acc: any, cur) => acc.concat({ name: cur, value: cur }), []);
     userCountry = await paginateItems(formattedCountry, 10);
   }
   return userCountry
 }
 
-export const getUserContinent = async () => {
+export const getUserContinent = async (continent?: string): Promise<string> => {
   const continents = Object.keys(countriesByContinent)
+  if (continent && continents.includes(capitalizeWords(continent))) return continent
   let userContinent = await input({ message: "Enter the continent: " });
+  
   if (!continents.includes(capitalizeWords(userContinent))) {
     log(chalk.yellow("Invalid continent name"));
     continents.sort();
-    const formattedContinent = continents.reduce((acc, cur) => acc.concat({ name: cur, value: cur }), []);
-    userContinent = await paginateItems(formattedContinent, 10, "continent");
+    const formattedContinent = continents.reduce((acc: any, cur) => acc.concat({ name: cur, value: cur }), []);
+    userContinent = await paginateItems(formattedContinent, 10, "continent")!;
   }
   return userContinent
 }
-
-export const customTable = (fields, colWidths = [4, 20, 10, 10, 10, 10, 10, 15, 20, 20, 13]) => {
+// [4, 20, 10, 10, 10, 10, 10, 15, 20, 20, 13]
+export const customTable = (fields: any, colWidths = [4, 20, 10, 13, 10, 10, 10, 20, 20, 20, 20]) => {
   return new CliTable3({
     head: fields,
-    colWidths: colWidths,
     wordWrap: true,
+    colWidths: colWidths,
     style: {
       head: ['green',],
     },

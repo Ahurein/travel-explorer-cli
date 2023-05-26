@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+import figlet from "figlet";
+import { Command } from "commander";
+import chalk from "chalk";
+import { attractionsCommand } from "./commands/attractionCommands.js";
+import { statisticsCommand } from "./commands/statisticsCommands.js";
+// import packageJson from "../package.json";
+
+const program = new Command();
+const log = console.log;
+
+program.version("0.0.1", "-v, --version").description(chalk.bgCyan("CLI utility to easily browse flights, hotels and attractions in every country/city"))
+
+log(figlet.textSync("Travel  Explorer"));
+program.addCommand(attractionsCommand);
+program.addCommand(statisticsCommand);
+program.parse(process.argv);
