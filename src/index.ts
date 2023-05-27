@@ -4,7 +4,6 @@ import { Command } from "commander";
 import chalk from "chalk";
 import { attractionsCommand } from "./commands/attractionCommands.js";
 import { statisticsCommand } from "./commands/statisticsCommands.js";
-// import packageJson from "../package.json";
 
 const program = new Command();
 const log = console.log;

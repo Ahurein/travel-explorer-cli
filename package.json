@@ -1,5 +1,5 @@
 {
-  "name": "travel-explorer",
+  "name": "@ahurein/travel-explorer",
   "version": "0.0.1",
   "description": "CLI utility to easily browse flights, hotels and attractions in every country/city",
   "exports": "./lib/index.js",
