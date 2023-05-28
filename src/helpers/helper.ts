@@ -84,7 +84,7 @@ export const getUserContinent = async (continent?: string): Promise<string> => {
   const continents = Object.keys(countriesByContinent)
   if (continent && continents.includes(capitalizeWords(continent))) return continent
   let userContinent = await input({ message: "Enter the continent: " });
-  
+
   if (!continents.includes(capitalizeWords(userContinent))) {
     log(chalk.yellow("Invalid continent name"));
     continents.sort();
@@ -93,8 +93,11 @@ export const getUserContinent = async (continent?: string): Promise<string> => {
   }
   return userContinent
 }
-// [4, 20, 10, 10, 10, 10, 10, 15, 20, 20, 13]
-export const customTable = (fields: any, colWidths = [4, 20, 10, 13, 10, 10, 10, 20, 20, 20, 20]) => {
+
+export const customTable = (fields: any, colWidthsPercentage = [4, 13, 7, 8, 7, 6, 6, 10, 11, 11, 10]) => {
+  const terminalWidth = process.stdout.columns;
+  const colWidths = colWidthsPercentage.map(percentage => Math.floor(terminalWidth * (percentage / 100)));
+
   return new CliTable3({
     head: fields,
     wordWrap: true,

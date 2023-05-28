@@ -1,8 +1,8 @@
-import { Command} from "commander";
+import { Command } from "commander";
 import { input, select, confirm, rawlist } from "@inquirer/prompts";
 import { capitalizeWords, customTable, getUserContinent, getUserCountry } from "../helpers/helper.js";
 import chalk from "chalk";
-import {getAttractionsNearYou, getContinentTodo, getCountryTodo } from "../attractionsApi.js";
+import { getAttractionsNearYou, getContinentTodo, getCountryTodo } from "../attractionsApi.js";
 import ora from 'ora';
 import { ISearchAttractionActions, IAttraction, IAttractionObj, LocationType } from "../interface/global.interface.js";
 import { displayLocationAttractions } from "../helpers/display.js";
@@ -18,26 +18,26 @@ attractionsCommand
   .option("-c, --country <country name>", "specify the country to search for")
   .option("-n, --continent <continent name>", "filter results by continent")
   .action(async (options) => {
-    
+
     if (Object.keys(options).length) {
-      const {country, city, continent} = options
+      const { country, city, continent } = options
       let userCountry: string, userContinent: string;
 
-      if(continent){
+      if (continent) {
         userContinent = await getUserContinent(continent)
         await displayLocationAttractions(userContinent, LocationType.CONTINENT)
 
-      } else if(city && !country || city && country){
+      } else if (city && !country || city && country) {
         userCountry = await getUserCountry(country)
         await displayLocationAttractions(userCountry, LocationType.CITY, city)
 
-        
-      } else if(country){
+
+      } else if (country) {
         userCountry = await getUserCountry(country)
         await displayLocationAttractions(userCountry, LocationType.COUNTRY)
       }
 
-      
+
 
     } else {
       const searchBy = await select({
@@ -103,8 +103,8 @@ const searchByFunctions: ISearchAttractionActions = {
       choices
     })
 
-    let count = 0, page = 1, userCountry="", filterBy = "", userContinent="", attractions = [], askUserLocation = true;
-    const thingsToDoTable = customTable(["No", "Title", "Location", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"], [4, 20, 10, 8, 8, 10, 9, 15, 20, 20, 20])
+    let count = 0, page = 1, userCountry = "", userContinent = "", attractions = [], askUserLocation = true;
+    const thingsToDoTable = customTable(["No", "Title", "Location", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"])
 
     while (true) {
       switch (filter) {
@@ -127,10 +127,10 @@ const searchByFunctions: ISearchAttractionActions = {
       }
 
       if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${filter}`))
-      if(filter === "country"){
+      if (filter === "country") {
         log(`Things to do grouped by cities in ${capitalizeWords(userCountry)}: ${chalk.bold.green(attractions?.total)}`)
-      }else{
-        log(`Things to do grouped by countries in ${capitalizeWords(userCountry)}: ${chalk.bold.green(attractions?.total)}`)
+      } else {
+        log(`Things to do grouped by countries in ${capitalizeWords(userContinent)}: ${chalk.bold.green(attractions?.total)}`)
       }
 
       attractions.attractions.forEach((attractionObj: IAttractionObj) => {
@@ -144,7 +144,7 @@ const searchByFunctions: ISearchAttractionActions = {
         const { title, city, price, cancellation, country, overall_rating, main_image, url } = attraction
 
 
-        thingsToDoTable.push([count, title, `${city},\n${country}`, total, price, cancellation, overall_rating, {content: chalk.yellow("View image"), href: main_image} , review, overview, {content: chalk.yellow("Book attraction"), href: url}])
+        thingsToDoTable.push([count, title, `${city},\n${country}`, total, price, cancellation, overall_rating, { content: chalk.yellow("View image"), href: main_image }, review, overview, { content: chalk.yellow("Book attraction"), href: url }])
       })
       log(thingsToDoTable.toString())
 
@@ -169,7 +169,7 @@ const searchByFunctions: ISearchAttractionActions = {
 
       if (attractions.message) return log(chalk.red(attractions.message))
       if (!attractions?.total) return log(chalk.red(`Sorry, We do not have any attractions on ${userCountry}`))
-      log(`Attractions found: ${chalk.bold.green(attractions?.total)}`)
+      log(`Attractions ${userCountry} found: ${chalk.bold.green(attractions?.total)}`)
 
       attractions.attractions.forEach((attractionObj: IAttractionObj) => {
         const { total, attraction } = attractionObj
@@ -181,7 +181,7 @@ const searchByFunctions: ISearchAttractionActions = {
         }
         const { title, city, price, cancellation, country, overall_rating, main_image, url } = attraction
 
-        thingsToDoTable.push([count, title, `${city},\n${country}`, total, price, cancellation, overall_rating, {content: chalk.yellow("View image"), href: main_image} , review, overview, {content: chalk.yellow("Book attraction"), href: url}])
+        thingsToDoTable.push([count, title, `${city},\n${country}`, total, price, cancellation, overall_rating, { content: chalk.yellow("View image"), href: main_image }, review, overview, { content: chalk.yellow("Book attraction"), href: url }])
       })
       log(thingsToDoTable.toString())
 
