@@ -16,7 +16,7 @@ process.on("unhandledRejection", ()=> {
 
 program.showHelpAfterError(true)
 
-program.version("0.0.1", "-v, --version").description(chalk.bgCyan("CLI utility to easily browse flights, hotels and attractions in every country/city"))
+program.version("0.0.3", "-v, --version").description(chalk.bgCyan("CLI utility to easily browse attractions in every country/city"))
 
 if(process.argv.slice(2).length === 0){
     log(figlet.textSync("Travel  Explorer"));

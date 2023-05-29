@@ -3,7 +3,7 @@ import axios from 'axios'
 const log = console.log
 
 const axiosClient = axios.create({
-    baseURL: "http://localhost:5000/api/v1",
+    baseURL: "https://travel-explorer-backend.onrender.com/api/v1",
     headers: {
         "Content-Type": "Application/json"
     }

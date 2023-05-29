@@ -18,8 +18,10 @@
 # Install globally (recommended).
 npm install -g @ahurein/travel-explorer
 
+yarn global add @ahurein/travel-explorer
+
 # Or run directly with npx
-npx install @ahurein/travel-explorer
+npx install @ahurein/travel-explorer stats
 ```
 
 ## Usage
@@ -33,21 +35,21 @@ travel-explorer attractions
 ### Attraction options
 - By country
 ```sh
-travel-explorer -c Ghana
+travel-explorer attractions -c Ghana
 # or
-travel-explorer --country Ghana
+travel-explorer attractions --country Ghana
 ```
 - By city
 ```sh
-travel-explorer -t Accra
+travel-explorer attractions -t Accra
 # or
-travel-explorer --city Accra
+travel-explorer attractions --city Accra
 ```
 - By continent
 ```sh
-travel-explorer -n Africa
+travel-explorer attractions -n Africa
 # or
-travel-explorer --continent Africa
+travel-explorer attractions --continent Africa
 ```
 
 ### Statistics
