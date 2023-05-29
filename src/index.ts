@@ -14,9 +14,14 @@ process.on("unhandledRejection", ()=> {
     process.exit(1)
 })
 
+program.showHelpAfterError(true)
+
 program.version("0.0.1", "-v, --version").description(chalk.bgCyan("CLI utility to easily browse flights, hotels and attractions in every country/city"))
 
-log(figlet.textSync("Travel  Explorer"));
+if(process.argv.slice(2).length === 0){
+    log(figlet.textSync("Travel  Explorer"));
+}
+
 program.addCommand(attractionsCommand);
 program.addCommand(statisticsCommand);
 program.parse(process.argv);

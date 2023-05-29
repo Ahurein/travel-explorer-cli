@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "npm test",
-    "build": "tsc --watch",
+    "build": "tsc",
     "link": "npm link"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "email": "ahureinebenezer@gmail.com",
     "url": "https://github.com/Ahurein"
   },
+  "files": ["lib"],
   "node": ">=14.16",
   "license": "MIT",
   "dependencies": {

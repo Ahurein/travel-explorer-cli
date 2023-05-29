@@ -3,6 +3,8 @@ import chalk from "chalk";
 import countriesObject from '../data/countries.js'
 import CliTable3 from "cli-table3";
 import { CellOptionsWithHref, IAllCountries } from "../interface/global.interface.js";
+import figlet from "figlet";
+import { program } from "commander";
 
 const paginateColor = chalk.hex("#FC4F00")
 const log = console.log

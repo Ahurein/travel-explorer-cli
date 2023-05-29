@@ -16,10 +16,10 @@
 
 ```sh
 # Install globally (recommended).
-npm install -g travel-explorer
+npm install -g @ahurein/travel-explorer
 
 # Or run directly with npx
-npx install travel-explorer
+npx install @ahurein/travel-explorer
 ```
 
 ## Usage
@@ -55,3 +55,8 @@ travel-explorer --continent Africa
 travel-explorer stats
 ```
 ![statistics](./images/stats.png)
+
+## Contribution
+To contribute ideas to the project, contact me or send a PR. All Codes are available [here](https://github.com/Ahurein/travel-explorer-cli)
+- [Github](https://github.com/ahurein)
+- [LinkedIn](https://www.linkedin.com/in/ebenezer-ahurein/)
