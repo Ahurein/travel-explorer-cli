@@ -40,36 +40,34 @@ attractionsCommand
 
 
     } else {
-      const searchBy = await select({
-        message: "Select what you want to search by:",
-        choices: [
-          {
-            name: "country",
-            value: "countryFilter",
-            // description: "Search attractions by country",
-          },
-          {
-            name: "continent",
-            value: "continentFilter",
-            // description: "Search attractions by continent",
-          },
-          {
-            name: "city",
-            value: "cityFilter",
-            // description: "Search attractions by city",
-          },
-          {
-            name: "Things to do",
-            value: "activityFilter",
-            // description: "Filter by things to do",
-          },
-          {
-            name: "Near you",
-            value: "nearFilter",
-            // description: "Search attractions near you",
-          },
-        ],
-      });
+
+      const searchByChoices = [
+        {
+          name: "country",
+          value: "countryFilter",
+        },
+        {
+          name: "continent",
+          value: "continentFilter",
+        },
+        {
+          name: "city",
+          value: "cityFilter",
+        },
+        {
+          name: "Things to do",
+          value: "activityFilter",
+        },
+        {
+          name: "Near you",
+          value: "nearFilter",
+        },
+      ]
+
+      const searchBy = await rawlist({
+        message: "Select what you want to search by: ",
+        choices: searchByChoices
+      })
 
       searchByFunctions[searchBy]();
     }
@@ -103,7 +101,7 @@ const searchByFunctions: ISearchAttractionActions = {
       choices
     })
 
-    let count = 0, page = 1, userCountry = "", userContinent = "", attractions = [], askUserLocation = true;
+    let count = 0, page = 1, userCountry = "", userContinent = "", attractions: any = [], askUserLocation = true;
     const thingsToDoTable = customTable(["No", "Title", "Location", "Things to do", "Price (USD)", "Cancellation", "Overall Rating", "Image", "Reviews", "Overview", "URL"])
 
     while (true) {

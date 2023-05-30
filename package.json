@@ -1,6 +1,6 @@
 {
   "name": "@ahurein/travel-explorer",
-  "version": "0.0.3",
+  "version": "0.0.32",
   "description": "CLI utility to easily browse attractions in every country/city",
   "exports": "./lib/index.js",
   "type": "module",
@@ -18,13 +18,17 @@
   },
   "homepage": "https://github.com/Ahurein/travel-explorer-cli#readme",
   "keywords": [
+    "travel explorer",
     "travel",
     "hotels",
     "attractions",
     "booking",
     "priceline",
     "kayak",
-    "viator"
+    "viator",
+    "travel-explorer",
+    "@ahurein/travel-explorer",
+    "ahurein"
   ],
   "author": {
     "name": "Ahurein Ebenezer",
@@ -41,12 +45,12 @@
     "cli-table3": "^0.6.3",
     "commander": "^10.0.1",
     "figlet": "^1.6.0",
-    "ora": "^6.3.0",
-    "typescript": "^5.0.4"
+    "ora": "^6.3.0"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.6",
     "@types/node": "^20.2.3",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   }
 }

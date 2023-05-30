@@ -6,6 +6,8 @@ import { CellOptionsWithHref, IAllCountries } from "../interface/global.interfac
 import figlet from "figlet";
 import { program } from "commander";
 
+import tty from 'tty'
+
 const paginateColor = chalk.hex("#FC4F00")
 const log = console.log
 const countriesByContinent: IAllCountries = countriesObject
@@ -96,8 +98,8 @@ export const getUserContinent = async (continent?: string): Promise<string> => {
   return userContinent
 }
 
-export const customTable = (fields: any, colWidthsPercentage = [4, 13, 7, 8, 7, 6, 6, 10, 11, 11, 10]) => {
-  const terminalWidth = process.stdout.columns;
+export const customTable = (fields: any, colWidthsPercentage = [5, 14, 7, 8, 7, 7, 2, 10, 12, 12, 10]) => {
+  const terminalWidth = process.stdout.columns || 100
   const colWidths = colWidthsPercentage.map(percentage => Math.floor(terminalWidth * (percentage / 100)));
 
   return new CliTable3({
@@ -107,20 +109,20 @@ export const customTable = (fields: any, colWidthsPercentage = [4, 13, 7, 8, 7, 
     style: {
       head: ['green',],
     },
-    chars: {
-      top: '═',
-      'top-mid': '╤',
-      'top-left': '╔',
-      'top-right': '╗',
-      bottom: '═',
-      'bottom-mid': '╧',
-      'bottom-left': '╚',
-      'bottom-right': '╝',
-      left: '║',
-      'left-mid': '╟',
-      right: '║',
-      'right-mid': '╢',
-    },
+    // chars: {
+    //   top: '═',
+    //   'top-mid': '╤',
+    //   'top-left': '╔',
+    //   'top-right': '╗',
+    //   bottom: '═',
+    //   'bottom-mid': '╧',
+    //   'bottom-left': '╚',
+    //   'bottom-right': '╝',
+    //   left: '║',
+    //   'left-mid': '╟',
+    //   right: '║',
+    //   'right-mid': '╢',
+    // },
   })
 
 }

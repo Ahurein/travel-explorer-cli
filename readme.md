@@ -19,9 +19,6 @@
 npm install -g @ahurein/travel-explorer
 
 yarn global add @ahurein/travel-explorer
-
-# Or run directly with npx
-npx install @ahurein/travel-explorer stats
 ```
 
 ## Usage
@@ -54,7 +51,7 @@ travel-explorer attractions --continent Africa
 
 ### Statistics
 ```sh
-travel-explorer stats
+travel-explorer attractions stats
 ```
 ![statistics](./images/stats.png)
 

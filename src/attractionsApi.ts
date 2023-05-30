@@ -1,12 +1,15 @@
 import axios from 'axios'
+import https from 'https'
+
 
 const log = console.log
 
 const axiosClient = axios.create({
-    baseURL: "https://travel-explorer-backend.onrender.com/api/v1",
+    baseURL: "https://travelexplorer.witfitminds.com/api/v1",
     headers: {
         "Content-Type": "Application/json"
-    }
+    },
+    httpsAgent: new https.Agent({rejectUnauthorized: false})
 })
 
 // process.on("uncaughtException", () => log(chalk.red("Encountered an error, try again")))
@@ -14,7 +17,7 @@ const axiosClient = axios.create({
 export const getAttractionsNearYou = async (country: string, page: number) => {
     try {
         const attractions = await axiosClient.post("/attractions/near-you", { country, page: Number(page)}) 
-        return attractions.data?.data
+        return attractions.data?.data;
     } catch (e: any) {
     }
 }
