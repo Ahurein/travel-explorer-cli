@@ -98,8 +98,8 @@ export const getUserContinent = async (continent?: string): Promise<string> => {
   return userContinent
 }
 
-export const customTable = (fields: any, colWidthsPercentage = [5, 14, 7, 8, 7, 7, 2, 10, 12, 12, 10]) => {
-  const terminalWidth = process.stdout.columns || 100
+export const customTable = (fields: any, colWidthsPercentage = [4, 13, 7, 8, 7, 6, 6, 10, 11, 11, 10]) => {
+  const terminalWidth = process.stdout.columns || 120
   const colWidths = colWidthsPercentage.map(percentage => Math.floor(terminalWidth * (percentage / 100)));
 
   return new CliTable3({
