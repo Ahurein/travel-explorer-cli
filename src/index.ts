@@ -8,11 +8,11 @@ import { statisticsCommand } from "./commands/statisticsCommands.js";
 const program = new Command();
 const log = console.log;
 
-//handle all unhandled exceptions
-// process.on("unhandledRejection", ()=> {
-//     log(chalk.red(" Encountered an error, try again later"))
-//     process.exit(1)
-// })
+// handle all unhandled exceptions
+process.on("unhandledRejection", ()=> {
+    log(chalk.red(" Encountered an error, try again later"))
+    process.exit(1)
+})
 
 program.showHelpAfterError(true)
 

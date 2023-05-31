@@ -2,6 +2,8 @@
 
 > CLI utility to easily browse attractions in every country/city
 
+<span style="color:red;">Recommended terminal: CMD</span>
+
 ## Features
 
 - Get attractions by city
@@ -51,7 +53,7 @@ travel-explorer attractions --continent Africa
 
 ### Statistics
 ```sh
-travel-explorer attractions stats
+travel-explorer stats
 ```
 ![statistics](./images/stats.png)
 
