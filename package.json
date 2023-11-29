@@ -1,6 +1,6 @@
 {
   "name": "@ahurein/travel-explorer",
-  "version": "0.0.32",
+  "version": "0.0.34",
   "description": "CLI utility to easily browse attractions in every country/city",
   "exports": "./lib/index.js",
   "type": "module",

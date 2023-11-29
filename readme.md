@@ -1,3 +1,9 @@
+# Deprecated Notice
+<div style="background-color: #ff8fab; color: black; padding: 10px; border-radius: 5px;">
+⚠️ **Deprecation Notice**: This npm package has been deprecated and is no longer actively maintained or recommended for use. 
+</div>
+-
+
 # Travel Explorer
 
 > CLI utility to easily browse attractions in every country/city
